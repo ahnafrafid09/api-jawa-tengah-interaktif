@@ -106,15 +106,15 @@ exports.deleteArticle = async (request, h) => {
 
         const { data: existingArticle, error: fetchError } = await supabase
             .from("artikel")
-            .select("image_url")
+            .select("url_gambar")
             .eq("id", id)
             .single();
 
         if (fetchError) return h.response({ statusCode: 500, message: "Gagal mengambil data artikel", error: fetchError.message }).code(500);
         if (!existingArticle) return h.response({ statusCode: 404, message: "Artikel tidak ditemukan", error: "Artikel tidak ditemukan" }).code(404);
 
-        if (existingArticle.image_url) {
-            const imagePath = existingArticle.image_url.replace(`${process.env.SUPABASE_URL}/storage/v1/object/public/${process.env.SUPABASE_BUCKET_NAME}/`, "");
+        if (existingArticle.url_gambar) {
+            const imagePath = existingArticle.url_gambar.replace(`${process.env.SUPABASE_URL}/storage/v1/object/public/${process.env.SUPABASE_BUCKET_NAME}/`, "");
             await supabase.storage.from(process.env.SUPABASE_BUCKET_NAME).remove([imagePath]);
         }
 
