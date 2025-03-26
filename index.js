@@ -18,7 +18,20 @@ const init = async () => {
                 credentials: true
             }
         }
+
     });
+
+    server.route({
+        method: 'GET',
+        path: '/',
+        handler: (request, h) => {
+            return h.response({
+                message: 'Welcome to jawa tengah interaktif API',
+                status: 'success'
+            }).code(200);
+        }
+    });
+
     server.route([...articleRoute]);
     server.route([...traditionRoute]);
     server.route([...dictionaryRoute]);
@@ -29,5 +42,9 @@ const init = async () => {
     console.log("Server berjalan di:", server.info.uri);
 
 };
+process.on('unhandledRejection', (err) => {
+    console.error('🔥 Unhandled Rejection:', err);
+    process.exit(1);
+});
 
 init();
